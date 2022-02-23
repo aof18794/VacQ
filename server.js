@@ -2,10 +2,12 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
 
 
 // Route files
 const hospitals = require('./routes/hospitals');
+const auth = require('./routes/auth');
 
 // Connect to database
 connectDB();
@@ -20,8 +22,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use('/api/v1/hospitals',hospitals);
+app.use('/api/v1/auth',auth);
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 
 const PORT = process.env.PORT || 5000;
