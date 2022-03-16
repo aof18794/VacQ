@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 // Route files
 const hospitals = require('./routes/hospitals');
 const auth = require('./routes/auth');
+const appointments = require('./routes/appointments');
 
 // Connect to database
 connectDB();
@@ -23,6 +24,8 @@ app.use(bodyParser.urlencoded({
 
 app.use('/api/v1/hospitals',hospitals);
 app.use('/api/v1/auth',auth);
+app.use('/api/v1/appointments',appointments);
+//app.use('/api/v1/hospitals/:hospitalId/appointments',appointments);
 
 app.use(express.json());
 
