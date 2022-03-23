@@ -1,44 +1,45 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser');
-
+const express = require("express");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 // Route files
-const hospitals = require('./routes/hospitals');
-const auth = require('./routes/auth');
-const appointments = require('./routes/appointments');
+const hospitals = require("./routes/hospitals");
+const auth = require("./routes/auth");
+const appointments = require("./routes/appointments");
 
 // Connect to database
 connectDB();
 
-dotenv.config({path:'./config/config.env'});
+dotenv.config({ path: "./config/config.env" });
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
-app.use('/api/v1/hospitals',hospitals);
-app.use('/api/v1/auth',auth);
-app.use('/api/v1/appointments',appointments);
+app.use("/api/v1/hospitals", hospitals);
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/appointments", appointments);
 //app.use('/api/v1/hospitals/:hospitalId/appointments',appointments);
 
 app.use(express.json());
 
 app.use(cookieParser());
 
-
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT,console.log('Server running in',process.env.NODE_ENV,' mode on port',PORT));
+const server = app.listen(
+  PORT,
+  console.log("Server running in", process.env.NODE_ENV, " mode on port", PORT)
+);
 
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`);
 
-process.on('unhandledRejection',(err,promise) => {
-    console.log(`Error: ${err.message}`);
-
-    server.close(() => process.exit(1));
-
-})
+  server.close(() => process.exit(1));
+});
