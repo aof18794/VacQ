@@ -3,6 +3,12 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
 
 // Route files
 const hospitals = require("./routes/hospitals");
@@ -22,6 +28,27 @@ app.use(
     extended: true,
   })
 );
+
+//Set Sanitize
+app.use(mongoSanitize());
+
+//Set security
+app.use(helmet());
+
+//Prevent XSS attacks
+app.use(xss());
+
+//Rate Limiting
+const limiter = rateLimit({
+  windowsMS: 10 * 60 * 1000, //10mins
+  max: 1,
+});
+
+app.use(limiter);
+
+app.use(hpp());
+
+app.use(cors());
 
 app.use("/api/v1/hospitals", hospitals);
 app.use("/api/v1/auth", auth);

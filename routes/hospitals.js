@@ -21,6 +21,7 @@ router
   .route("/")
   .get(getHospitals)
   .post(protect, authorize("admin"), createHospitals);
+  
 router
   .route("/:id")
   .get(getHospital)
